@@ -16,41 +16,18 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.'''
 
+import os
+import datetime
 from wb import *
 import grt
-from mforms import Utilities, FileChooser
 import mforms
-import datetime
-import os
+from mforms import Utilities, FileChooser
 
+# Global vars
 filePath=""
 newPath=""
 docProject=""
 
-def connection():
-    pass
-
-def findModels(models,path):
-    for m in models:
-        findSchemas(m.catalog.schemata,path)
-        #print(m)
-    pass
-
-def findSchemas(schemata, path):
-    for s in schemata:
-        newPath=""
-        sn = s.name
-        print(sn)
-        newPath = path + "//%s" % (sn)
-        print(newPath)
-        if os.path.exists(newPath):
-            #maybe delete and recreate here
-            print("Folder Exists")
-        else:
-            os.makedirs(newPath)
-        htmlSchemaFiles(s,newPath)
-    pass
-    
 
 def ashtondatadictionary():
     #print(grt.root.wb.doc)
@@ -132,6 +109,34 @@ def ashtondatadictionary():
     writeToFile(indexPath,textEnd,"a")
     pass
 
+
+def connection():
+    pass
+
+
+def findModels(models,path):
+    for m in models:
+        findSchemas(m.catalog.schemata,path)
+        #print(m)
+    pass
+
+
+def findSchemas(schemata, path):
+    for s in schemata:
+        newPath=""
+        sn = s.name
+        print(sn)
+        newPath = path + "//%s" % (sn)
+        print(newPath)
+        if os.path.exists(newPath):
+            #maybe delete and recreate here
+            print("Folder Exists")
+        else:
+            os.makedirs(newPath)
+        htmlSchemaFiles(s,newPath)
+    pass
+
+
 def chooseFolder():
     # Put plugin contents here
     path= ""
@@ -145,6 +150,7 @@ def chooseFolder():
         return path
     pass
 
+
 def writeToFile(path,text,mode):
     print(path)
     if mode == "a":
@@ -153,6 +159,7 @@ def writeToFile(path,text,mode):
         tFile = open(path, "w")
     print >>tFile, text
     tFile.close()
+
 
 def htmlSchemaFiles(schema,path):
     # iterate through columns from schema
@@ -234,5 +241,6 @@ def htmlSchemaFiles(schema,path):
       writeToFile(newPath,text,"w")
     #Utilities.show_message("Report generated", "HTML Report format from current model generated", "OK","","")
     return 0
+
 
 ashtondatadictionary()
