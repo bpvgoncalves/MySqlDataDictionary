@@ -2,6 +2,7 @@
 '''
 MySQLDataDictionary: documents a MySQL model as html
 Copyright (C) 2018  Ashton Lamont
+Copyright (C) 2020  Bruno Gonçalves
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -33,13 +34,12 @@ def ashtondatadictionary():
     #print(grt.root.wb.doc)
     global filePath
     filePath = chooseFolder()
-    #global filePath
-    #filePath = os.path.dirname(fullFilePath)
+
     global docProject
     docProject = grt.root.wb.doc.info.project
 
     newPath=""
-    newPath=filePath + "//%s" % (docProject)
+    newPath=filePath + "/%s" % (docProject)
     print(newPath)
 
     if os.path.exists(newPath):
@@ -50,9 +50,9 @@ def ashtondatadictionary():
         os.makedirs(filePath + "/assets")
 
     _createStyleFile()
+    _createLandingPage()
     
-    global filePath
-    indexPath=filePath + "//index.html"
+    indexPath=filePath + "/index.html"
     textStart ="""<html><head><title>Schema Report</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -108,7 +108,7 @@ def ashtondatadictionary():
 
     findModels(grt.root.wb.doc.physicalModels,newPath)
     #print(filePath)
-    textEnd = """</div><div class="content"><iframe id="tableFrame" src="blank.html" ></div></body></html>"""
+    textEnd = """</div><div class="content"><iframe id="tableFrame" src="./assets/main.html"></div></body></html>"""
     writeToFile(indexPath,textEnd,"a")
     pass
 
@@ -140,6 +140,29 @@ def _createStyleFile():
             }"""
     writeToFile(exportPath, css, "w")
 
+
+def _createLandingPage():
+    exportPath = filePath + "/assets/main.html"
+    html = """
+        <!DOCTYPE html>
+        <html>
+            <head>
+                <title>MySQL Database Documenter</title>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <link rel="stylesheet" type="text/css" href="style.css">
+            </head>
+            <body>
+                <div class="header">
+                    <h1>MySQL Database Documenter<h1>
+                    <div class="version">0.0.0</div>
+                </div>
+                <div class="footer">
+                    Copyright (C) 2018 Ashton Lamont<br/>Copyright (C) 2020  Bruno Gonçalves
+                </div>
+            </body>
+        </html>"""
+    writeToFile(exportPath, html, "w")
+
 def connection():
     pass
 
@@ -156,7 +179,7 @@ def findSchemas(schemata, path):
         newPath=""
         sn = s.name
         print(sn)
-        newPath = path + "//%s" % (sn)
+        newPath = path + "/%s" % (sn)
         print(newPath)
         if os.path.exists(newPath):
             #maybe delete and recreate here
@@ -216,10 +239,10 @@ def htmlSchemaFiles(schema,path):
                 }
         </style>"""
       tn = table.name
-      newPath=path + "//%s.html" % (tn)
+      newPath=path + "/%s.html" % (tn)
       link = "<a href=\"#\" onclick=\"javascript:document.getElementById('tableFrame').src='./%s/%s/%s.html'\">%s.%s </a>" % (docProject,sn,tn,sn,tn)
       global filePath
-      listPath=filePath + "//index.html"
+      listPath=filePath + "/index.html"
       writeToFile(listPath,link,"a")
       
       text += "<a id=\"%s.%s\"></a>" % (sn,tn)
