@@ -47,6 +47,9 @@ def ashtondatadictionary():
         print("Folder Exists")
     else:    
         os.makedirs(newPath)
+        os.makedirs(filePath + "/assets")
+
+    _createStyleFile()
     
     global filePath
     indexPath=filePath + "//index.html"
@@ -109,6 +112,33 @@ def ashtondatadictionary():
     writeToFile(indexPath,textEnd,"a")
     pass
 
+
+def _createStyleFile():
+    exportPath = filePath + "/assets/style.css"
+    css = """/*Style Sheet*/
+            * {
+                box-sizing: border-box;
+            }
+            .header {
+                font-family: "sans-serif";
+                background: navy;
+                color: #FFFFFF;
+                font-size: 20px;
+                text-align: left
+            }
+            .version {
+                font-size: 14px
+            }
+            .footer {
+                font-family: "Consolas", "Courrier New", "monospace";
+                background: transparent;
+                color: navy;
+                font-size: 10px;
+                position: fixed;
+                bottom: 0;
+                text-align: left
+            }"""
+    writeToFile(exportPath, css, "w")
 
 def connection():
     pass
