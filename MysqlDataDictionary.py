@@ -30,7 +30,7 @@ newPath=""
 docProject=""
 
 
-def ashtondatadictionary():
+def mysqldatadictionary():
     #print(grt.root.wb.doc)
     global filePath
     filePath = chooseFolder()
@@ -351,4 +351,4 @@ def htmlSchemaFiles(schema,path):
     return 0
 
 
-ashtondatadictionary()
+mysqldatadictionary()
