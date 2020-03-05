@@ -276,6 +276,15 @@ def writeToFile(path,text,mode):
     print >>tFile, text
     tFile.close()
 
+def _isUnsignedColumn(column):
+    un = "n.a."
+    if "INT" in column.formattedType:
+        un = "No"
+        for f in column.flags:
+            if f == "UNSIGNED":
+                un = "Yes"
+    return un
+    
 
 def htmlSchemaFiles(schema,path):
     # iterate through columns from each table of the schema
@@ -319,7 +328,7 @@ def htmlSchemaFiles(schema,path):
             fk = ('No', 'Yes')[bool(table.isForeignKeyColumn(column))]
             nn = ('No', 'Yes')[bool(column.isNotNull)]
             ai = ('No', 'Yes')[bool(column.autoIncrement)]
-            un = 'n/a' #('No', 'Yes')[bool(column)]
+            un = _isUnsignedColumn(column)
             text += "<tr class='row'><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>" % (column.name,column.formattedType,nn,pk,fk,ai,un,column.defaultValue,column.comment)
 
         text += """<tr><th colspan=\"9\"  class='header'>Indexes</th></tr>
