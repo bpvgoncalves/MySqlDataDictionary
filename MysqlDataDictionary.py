@@ -348,19 +348,13 @@ def htmlSchemaFiles(schema,path):
             ai = ('No', 'Yes')[bool(column.autoIncrement)]
             un = _isUnsignedColumn(column)
             text += """
-                <tr class='columns-data'><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>""" 
-            % (column.name,column.formattedType,pk,nn,fk,ai,un,column.defaultValue,column.comment)
+                <tr class="columns-data"><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>""" % (column.name,column.formattedType,pk,nn,fk,ai,un,column.defaultValue,column.comment)
 
         text += """
             </table>
             <table>
-                <tr><th colspan=\"9\"  class='header'>Indexes</th></tr>
-        <tr>
-        <th class="header2">Name</th>
-        <th class="header2">Type</th>
-        <th class="header2">Columns</th>
-        <th class="header2" colspan="6">Comment</th>
-        </tr>"""
+                <tr class="indexes-title"><td colspan="4">Indexes</td></tr>
+                <tr class="indexes-header"><th>Name</th><th>Type</th><th>Columns</th><th>Comment</th></tr>"""
         for index in table.indices:
             # index name
             idn = index.name
@@ -374,9 +368,12 @@ def htmlSchemaFiles(schema,path):
 
 			# index description
             id = index.comment
-            text += "<tr class='row'><td>%s</td><td>%s</td><td>%s</td><td colspan='6'>%s</td></tr>" % (idn,it,ic,id)
-
-        text += """</table></body></html>"""
+            text += """
+                <tr class="indexes-data"><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>""" % (idn, it, ic, id)
+        text += """
+            </table>
+        </body>
+    </html>"""
         writeToFile(childPath,text,"w")
     #Utilities.show_message("Report generated", "HTML Report format from current model generated", "OK","","")
     return 0
