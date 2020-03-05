@@ -53,114 +53,158 @@ def ashtondatadictionary():
     _createLandingPage()
     
     indexPath=filePath + "/index.html"
-    textStart ="""<html><head><title>Schema Report</title>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            font-family: Arial, Helvetica, sans-serif;
-        }
-        iframe {
-            height:100%;
-            width:100%;
-        }
-        /* Style the side navigation */
-        .sidenav {
-            color:white;
-            height: 100%;
-            width: 350px;
-            position: fixed;
-            z-index: 1;
-            top: 0;
-            left: 0;
-            background-color: navy;
-            overflow-x: hidden;
-        }
-
-
-        /* Side navigation links */
-        .sidenav a {
-            color: white;
-            padding: 5px;
-            text-decoration: none;
-            display: block;
-        }
-
-        /* Change color on hover */
-        .sidenav a:hover {
-            background-color: #ddd;
-            color: black;
-        }
-        /* Style the content */
-        .content {
-            margin-left: 350px;
-            padding-left: 20px;
-        }
-        </style>
-      </head><body><div class="sidenav"><b>Schema and Table List: schema.table</b><br/>"""
+    textStart ="""<!DOCTYPE html>
+    <html>
+        <head>
+            <title>Schema Report</title>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <link rel="stylesheet" type="text/css" href="./assets/style.css">
+        </head>
+        <body>
+            <div class="page-header"><b>MySQL Database Documenter</b></div>
+            <div class="page-body">
+                <div class="sidenav">
+                    <b>Schema and Table List (schema.table):</b>
+                    <br/>"""
     writeToFile(indexPath,textStart,"w")
-    
-
     findModels(grt.root.wb.doc.physicalModels,newPath)
     #print(filePath)
-    textEnd = """</div><div class="content"><iframe id="tableFrame" src="./assets/main.html"></div></body></html>"""
+    textEnd = """                </div>
+                <div class="content">
+                    <iframe id="tableFrame" src="./assets/main.html"></iframe>
+                </div>
+            </div>
+        </body>
+    </html>"""
     writeToFile(indexPath,textEnd,"a")
     pass
 
 
 def _createStyleFile():
     exportPath = filePath + "/assets/style.css"
-    css = """/*Style Sheet*/
-            * {
-                box-sizing: border-box;
-            }
-            .header {
-                font-family: "sans-serif";
-                background: navy;
-                color: #FFFFFF;
-                font-size: 20px;
-                text-align: left
-            }
-            .version {
-                font-size: 14px
-            }
-            .footer {
-                font-family: "Consolas", "Courrier New", "monospace";
-                background: transparent;
-                color: navy;
-                font-size: 10px;
-                position: fixed;
-                bottom: 0;
-                text-align: left
-            }"""
+    css = "/*Style Sheet*/
+    @import url('https://fonts.googleapis.com/css?family=Orbitron:900|Poppins&display=swap');
+
+    * {
+        box-sizing: border-box;
+    }
+
+    html, body {
+        width: 100%;
+        height: 100%;
+        margin: 0px;
+        font-family: 'Poppins', 'Arial', 'Helvetica', 'sans-serif';
+        font-size: 1em;
+    }
+
+    .page-header {
+        top: 0px;
+        left: 0px;
+        margin-top: 0px;
+        margin-bottom: 0px;
+        background: navy;
+        width: 100%;
+        height: 6%;
+        float: left;
+        font-family: 'Orbitron', 'sans-serif';
+        text-shadow: 3px 3px 3px #EC0000;
+        color: #FFFFFF;
+        font-size: 1.95vw;
+        text-align: left;
+    }
+    
+    .page-body {
+        height: 94%;
+    }
+    .page-body::after {
+        content: "";
+        clear: both;
+        display: table;
+    }
+
+    /* Style the side navigation */
+    .sidenav {
+        top: 0px;
+        left: 0px;
+        background: navy;
+        width: 20%;
+        height: 100%;
+        float: left;
+        color: white;
+        font-size: 1.1vw;
+        z-index: 1;
+        overflow-x: hidden;
+        overflow-y: scroll;
+    }
+    /* Side navigation links */
+    .sidenav a {
+        color: white;
+        padding: 5px;
+        text-decoration: none;
+        display: block;
+    }
+    /* Change color on hover */
+    .sidenav a:hover {
+        background-color: #ddd;
+        color: black;
+    }
+    
+    /* Style the content */
+    .content {
+        height: 100%;
+        width: 80%;
+        float: left;
+        padding: 5px;
+    }
+    iframe {
+        height: 100%;
+        width: 100%;
+        overflow-x: scroll;
+        overflow-y: scroll;
+    }
+    
+    /*##############################*/
+    /* Landing page specific styles */
+    /*##############################*/
+    .landing-header{
+        font-family: 'Orbitron', 'sans-serif';
+        color: navy;
+    }
+    .landing-version {
+        font-size: 14px;
+    }
+    .landing-footer {
+        font-family: 'Consolas', 'Courier New', 'monospace';
+        background: transparent;
+        color: navy;
+        font-size: 10px;
+        position: fixed;
+        bottom: 0;
+        text-align: left
+    }"
     writeToFile(exportPath, css, "w")
 
 
 def _createLandingPage():
     exportPath = filePath + "/assets/main.html"
-    html = """
-        <!DOCTYPE html>
-        <html>
-            <head>
-                <title>MySQL Database Documenter</title>
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <link rel="stylesheet" type="text/css" href="style.css">
-            </head>
-            <body>
-                <div class="header">
-                    <h1>MySQL Database Documenter<h1>
-                    <div class="version">0.0.0</div>
-                </div>
-                <div class="footer">
-                    Copyright (C) 2018 Ashton Lamont<br/>Copyright (C) 2020  Bruno Gonçalves
-                </div>
-            </body>
-        </html>"""
+    html = """<!DOCTYPE html>
+    <html>
+        <head>
+            <title>MySQL Database Documenter</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <link rel="stylesheet" type="text/css" href="style.css">
+        </head>
+        <body>
+            <div class="landing-header">
+                <h1>MySQL Database Documenter</h1>
+                <div class="landing-version">0.0.0</div>
+            </div>
+            <div class="landing-footer">
+                Copyright (C) 2018 Ashton Lamont<br/>Copyright (C) 2020  Bruno Gonçalves
+            </div>
+        </body>
+    </html>"""
     writeToFile(exportPath, html, "w")
 
 def connection():
@@ -240,7 +284,7 @@ def htmlSchemaFiles(schema,path):
         </style>"""
       tn = table.name
       newPath=path + "/%s.html" % (tn)
-      link = "<a href=\"#\" onclick=\"javascript:document.getElementById('tableFrame').src='./%s/%s/%s.html'\">%s.%s </a>" % (docProject,sn,tn,sn,tn)
+      link = "                  <a href=\"#\" onclick=\"javascript:document.getElementById('tableFrame').src='./%s/%s/%s.html'\">%s.%s </a>" % (docProject,sn,tn,sn,tn)
       global filePath
       listPath=filePath + "/index.html"
       writeToFile(listPath,link,"a")
