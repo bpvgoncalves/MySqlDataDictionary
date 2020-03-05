@@ -200,7 +200,7 @@ def _createStyleFile():
 		background-color: #3498DB;
 		width: 25%
 	}
-	.table-row{
+	.table-data{
 		background-color: #FFFFFF ;
 		color: black;
 		font-weight: normal;
@@ -326,14 +326,16 @@ def htmlSchemaFiles(schema,path):
         listPath = newPath + "\index.html"
         writeToFile(listPath,link,"a")
       
-        text += "<a id=\"%s.%s\"></a>" % (sn,tn)
-        text += "<table>"
-        text += "    <th colspan=2 class='table-title'>Table</th>"
-        text += "    <tr><td class='table-header'>Schema</td><td class='table-row'>%s</td></tr>" % sn
-        text += "    <tr><td class='table-header'>Table Name</td><td class='table-row'>%s</td></tr>" % table.name
-        text += "    <tr><td class='table-header'>Table Comments</td><td class='table-row'>%s</td></tr>" % (table.comment)
-        text += "</table>"
-        text += """<table><tr><th colspan="9" class='header'>Columns</th></tr>
+        text += """
+            <a id="%s.%s"></a>
+            <table>
+                <th colspan="2" class="table-title">Table</th>
+                <tr><td class="table-header">Schema</td><td class="table-data">%s</td></tr>
+                <tr><td class="table-header">Table Name</td><td class="table-data">%s</td></tr>
+                <tr><td class="table-header">Table Comments</td><td class="table-data">%s</td></tr>
+            </table>"""  % (sn,tn,sn,tn,table.comment)
+
+        text += """<table><tr><th colspan="9" class="header">Columns</th></tr>
         <tr>
         <th class="header2">Name</th>
         <th class="header2">Data Type</th>
