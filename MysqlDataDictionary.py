@@ -193,14 +193,14 @@ def _createStyleFile():
 		color: white;
 		font-weight: bold;
 	}
-    .table-title{
+    .table-title, .columns-title {
 		background-color: navy;
 	} 
-	.table-header{
+	.table-header, .columns-header {
 		background-color: #3498DB;
 		width: 25%
 	}
-	.table-data{
+	.table-data, .columns-data {
 		background-color: #FFFFFF ;
 		color: black;
 		font-weight: normal;
@@ -329,7 +329,7 @@ def htmlSchemaFiles(schema,path):
         text += """
             <a id="%s.%s"></a>
             <table>
-                <th colspan="2" class="table-title">Table</th>
+                <tr class="table-title"><td colspan="2" >Table</td></tr>
                 <tr><td class="table-header">Schema</td><td class="table-data">%s</td></tr>
                 <tr><td class="table-header">Table Name</td><td class="table-data">%s</td></tr>
                 <tr><td class="table-header">DB Engine</td><td class="table-data">%s</td></tr>
@@ -337,27 +337,24 @@ def htmlSchemaFiles(schema,path):
                 <tr><td class="table-header">Table Comments</td><td class="table-data">%s</td></tr>
             </table>"""  % (sn, tn, sn, tn, table.tableEngine, table.lastChangeDate, table.comment)
 
-        text += """<table><tr><th colspan="9" class="header">Columns</th></tr>
-        <tr>
-        <th class="header2">Name</th>
-        <th class="header2">Data Type</th>
-        <th class="header2">Nullable</th>
-        <th class="header2">PK</th>
-        <th class="header2">FK</th>
-    	<th class="header2">AI</th>
-        <th class="header2">UN</th>
-        <th class="header2">Default</th>
-        <th class="header2">Comment</th>
-        </tr>"""
+        text += """
+            <table>
+                <tr class="columns-title"><td colspan="9">Columns</td></tr>
+                <tr class="columns-header"><th>Name</th><th>Data Type</th><th>PK</th><th>NN</th><th>FK</th><th>AI</th><th>UN</th><th>Default</th><th>Comment</th></tr>"""
         for column in table.columns:
             pk = ('No', 'Yes')[bool(table.isPrimaryKeyColumn(column))]
             fk = ('No', 'Yes')[bool(table.isForeignKeyColumn(column))]
             nn = ('No', 'Yes')[bool(column.isNotNull)]
             ai = ('No', 'Yes')[bool(column.autoIncrement)]
             un = _isUnsignedColumn(column)
-            text += "<tr class='row'><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>" % (column.name,column.formattedType,nn,pk,fk,ai,un,column.defaultValue,column.comment)
+            text += """
+                <tr class='columns-data'><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>""" 
+            % (column.name,column.formattedType,pk,nn,fk,ai,un,column.defaultValue,column.comment)
 
-        text += """<tr><th colspan=\"9\"  class='header'>Indexes</th></tr>
+        text += """
+            </table>
+            <table>
+                <tr><th colspan=\"9\"  class='header'>Indexes</th></tr>
         <tr>
         <th class="header2">Name</th>
         <th class="header2">Type</th>
