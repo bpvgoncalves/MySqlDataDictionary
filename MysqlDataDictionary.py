@@ -295,7 +295,7 @@ def htmlSchemaFiles(schema,path):
         <body>"""
       tn = table.name
       childPath=path + "\%s.html" % (tn)
-      link = "                  <a href=\"#\" onclick=\"javascript:document.getElementById('tableFrame').src='./%s/%s.html'\">%s.%s </a>" % (sn,tn,sn,tn)
+      link = "                    <a href=\"#\" onclick=\"javascript:document.getElementById('tableFrame').src='./%s/%s.html'\">%s.%s </a>" % (sn,tn,sn,tn)
       #global newPath
       listPath = newPath + "\index.html"
       writeToFile(listPath,link,"a")
