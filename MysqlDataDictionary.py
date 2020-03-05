@@ -25,9 +25,10 @@ import mforms
 from mforms import Utilities, FileChooser
 
 # Global vars
-filePath=""
-newPath=""
-docProject=""
+filePath = ""
+newPath = ""
+docProject = ""
+scriptVersion = "0.1.0"
 
 
 def mysqldatadictionary():
@@ -217,13 +218,13 @@ def _createLandingPage():
         <body>
             <div class="landing-header">
                 <h1>MySQL Database Documenter</h1>
-                <div class="landing-version">0.0.0</div>
+                <div class="landing-version">%s</div>
             </div>
             <div class="landing-footer">
                 Copyright (C) 2018 Ashton Lamont<br/>Copyright (C) 2020  Bruno Gonçalves
             </div>
         </body>
-    </html>"""
+    </html>""" % scriptVersion
     writeToFile(exportPath, html, "w")
 
 def connection():
