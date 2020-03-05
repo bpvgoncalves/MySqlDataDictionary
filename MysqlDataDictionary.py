@@ -258,7 +258,7 @@ def chooseFolder():
     path= ""
     filechooser = FileChooser(mforms.OpenDirectory)
     if filechooser.run_modal():
-       path = filechooser.get_path()
+		path = filechooser.get_path()
     print "HTML File: %s" % (path)
 
     if len(path) >= 1:
@@ -278,13 +278,12 @@ def writeToFile(path,text,mode):
 
 
 def htmlSchemaFiles(schema,path):
-    # iterate through columns from schema
+    # iterate through columns from each table of the schema
     sn = schema.name
-    text=""
-    global docProject
+
     for table in schema.tables:
-      text=""
-      text="""<!DOCTYPE html>
+        text=""
+        text="""<!DOCTYPE html>
     <html lang="en">
         <head>
 			<title>tables</title>
@@ -293,18 +292,17 @@ def htmlSchemaFiles(schema,path):
             <link rel="stylesheet" type="text/css" href="../_assets/style.css">
         </head>
         <body>"""
-      tn = table.name
-      childPath=path + "\%s.html" % (tn)
-      link = "                    <a href=\"#\" onclick=\"javascript:document.getElementById('tableFrame').src='./%s/%s.html'\">%s.%s </a>" % (sn,tn,sn,tn)
-      #global newPath
-      listPath = newPath + "\index.html"
-      writeToFile(listPath,link,"a")
+        tn = table.name
+        childPath=path + "\%s.html" % (tn)
+        link = "                    <a href=\"#\" onclick=\"javascript:document.getElementById('tableFrame').src='./%s/%s.html'\">%s.%s </a>" % (sn,tn,sn,tn)
+        listPath = newPath + "\index.html"
+        writeToFile(listPath,link,"a")
       
-      text += "<a id=\"%s.%s\"></a>" % (sn,tn)
-      text += "<table style=\"width:100%\">"
-      text += "<tr><th colspan=9 class='header'>Table: %s.%s</th></tr>" % (sn,tn)
-      text += "<tr class='row'><td>Table Comments</td><td colspan=\"8\">%s</td></tr>" % (table.comment)
-      text += """<tr><th colspan="9" class='header'>Columns</th></tr>
+        text += "<a id=\"%s.%s\"></a>" % (sn,tn)
+        text += "<table style=\"width:100%\">"
+        text += "<tr><th colspan=9 class='header'>Table: %s.%s</th></tr>" % (sn,tn)
+        text += "<tr class='row'><td>Table Comments</td><td colspan=\"8\">%s</td></tr>" % (table.comment)
+        text += """<tr><th colspan="9" class='header'>Columns</th></tr>
         <tr>
         <th class="header2">Name</th>
         <th class="header2">Data Type</th>
@@ -316,38 +314,38 @@ def htmlSchemaFiles(schema,path):
         <th class="header2">Default</th>
         <th class="header2">Comment</th>
         </tr>"""
-      for column in table.columns:
-        pk = ('No', 'Yes')[bool(table.isPrimaryKeyColumn(column))]
-        fk = ('No', 'Yes')[bool(table.isForeignKeyColumn(column))]
-        nn = ('No', 'Yes')[bool(column.isNotNull)]
-        ai = ('No', 'Yes')[bool(column.autoIncrement)]
-        un = 'n/a' #('No', 'Yes')[bool(column)]
-        text += "<tr class='row'><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>" % (column.name,column.formattedType,nn,pk,fk,ai,un,column.defaultValue,column.comment)
-      text += """<tr><th colspan=\"9\"  class='header'>Indexes</th></tr>
+        for column in table.columns:
+            pk = ('No', 'Yes')[bool(table.isPrimaryKeyColumn(column))]
+            fk = ('No', 'Yes')[bool(table.isForeignKeyColumn(column))]
+            nn = ('No', 'Yes')[bool(column.isNotNull)]
+            ai = ('No', 'Yes')[bool(column.autoIncrement)]
+            un = 'n/a' #('No', 'Yes')[bool(column)]
+            text += "<tr class='row'><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>" % (column.name,column.formattedType,nn,pk,fk,ai,un,column.defaultValue,column.comment)
+
+        text += """<tr><th colspan=\"9\"  class='header'>Indexes</th></tr>
         <tr>
         <th class="header2">Name</th>
         <th class="header2">Type</th>
         <th class="header2">Columns</th>
         <th class="header2" colspan="6">Comment</th>
         </tr>"""
-      for index in table.indices:
-	# index name
-    	idn = index.name
+        for index in table.indices:
+            # index name
+            idn = index.name
 
-    	# index columns
-    	ic = ""
-        ic = ", ".join(str(c.referencedColumn.name) for c in index.columns)
+			# index columns
+            ic = ""
+            ic = ", ".join(str(c.referencedColumn.name) for c in index.columns)
 
-    	# index type
-    	it = index.indexType
+			# index type
+            it = index.indexType
 
-    	# index description
-    	id = index.comment
-        text += "<tr class='row'><td>%s</td><td>%s</td><td>%s</td><td colspan='6'>%s</td></tr>" % (idn,it,ic,id)
-        #text += "</table></body></html>"
+			# index description
+            id = index.comment
+            text += "<tr class='row'><td>%s</td><td>%s</td><td>%s</td><td colspan='6'>%s</td></tr>" % (idn,it,ic,id)
 
-      text += """</table></body></html>"""
-      writeToFile(childPath,text,"w")
+        text += """</table></body></html>"""
+        writeToFile(childPath,text,"w")
     #Utilities.show_message("Report generated", "HTML Report format from current model generated", "OK","","")
     return 0
 
