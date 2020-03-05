@@ -83,7 +83,7 @@ def ashtondatadictionary():
 
 def _createStyleFile():
     exportPath = filePath + "/assets/style.css"
-    css = "/*Style Sheet*/
+    css = """/*Style Sheet*/
     @import url('https://fonts.googleapis.com/css?family=Orbitron:900|Poppins&display=swap');
 
     * {
@@ -182,7 +182,7 @@ def _createStyleFile():
         position: fixed;
         bottom: 0;
         text-align: left
-    }"
+    }"""
     writeToFile(exportPath, css, "w")
 
 
