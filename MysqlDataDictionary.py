@@ -54,7 +54,7 @@ def mysqldatadictionary():
     
     indexPath=newPath + "\index.html"
     textStart ="""<!DOCTYPE html>
-    <html>
+    <html lang="en">
         <head>
             <title>Schema Report</title>
             <meta charset="utf-8">
@@ -207,7 +207,7 @@ def _createStyleFile():
 def _createLandingPage():
     exportPath = newPath + "\_assets\main.html"
     html = """<!DOCTYPE html>
-    <html>
+    <html lang="en">
         <head>
             <title>MySQL Database Documenter</title>
             <meta charset="utf-8">
@@ -285,7 +285,7 @@ def htmlSchemaFiles(schema,path):
     for table in schema.tables:
       text=""
       text="""<!DOCTYPE html>
-    <html>
+    <html lang="en">
         <head>
 			<title>tables</title>
             <meta charset="utf-8">
