@@ -182,6 +182,24 @@ def _createStyleFile():
         position: fixed;
         bottom: 0;
         text-align: left
+    }
+    /*##############################*/
+    /* Child pages specific styles  */
+    /*##############################*/
+    .header{
+		background-color: navy;
+		color: white;
+		font-weight: bold;
+	} 
+	.header2{
+		background-color: #3498DB;
+		color: white;
+		font-weight: bold;
+	}
+	.row{
+		background-color: #85C1E9 ;
+		color: black;
+		font-weight: bold;
     }"""
     writeToFile(exportPath, css, "w")
 
@@ -265,23 +283,15 @@ def htmlSchemaFiles(schema,path):
     global docProject
     for table in schema.tables:
       text=""
-      text="""<style>
-            .header{
-                background-color: navy;
-                color: white;
-                font-weight: bold;
-                } 
-            .header2{
-                background-color: #3498DB;
-                color: white;
-                font-weight: bold;
-                }
-            .row{
-                background-color: #85C1E9 ;
-                color: black;
-                font-weight: bold;
-                }
-        </style>"""
+      text="""<!DOCTYPE html>
+    <html>
+        <head>
+			<title>tables</title>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <link rel="stylesheet" type="text/css" href="../../assets/style.css">
+        </head>
+        <body>"""
       tn = table.name
       newPath=path + "/%s.html" % (tn)
       link = "                  <a href=\"#\" onclick=\"javascript:document.getElementById('tableFrame').src='./%s/%s/%s.html'\">%s.%s </a>" % (docProject,sn,tn,sn,tn)
@@ -334,7 +344,8 @@ def htmlSchemaFiles(schema,path):
     	id = index.comment
         text += "<tr class='row'><td>%s</td><td>%s</td><td>%s</td><td colspan='6'>%s</td></tr>" % (idn,it,ic,id)
         #text += "</table></body></html>"
-        #print(text)
+
+      text += """</table></body></html>"""
       writeToFile(newPath,text,"w")
     #Utilities.show_message("Report generated", "HTML Report format from current model generated", "OK","","")
     return 0
