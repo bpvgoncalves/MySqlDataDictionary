@@ -18,17 +18,15 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.'''
 
 import os
-import datetime
 from wb import *
 import grt
-import mforms
 from mforms import Utilities, FileChooser
 
 # Global vars
 filePath = ""
 newPath = ""
 docProject = ""
-scriptVersion = "0.1.0"
+scriptVersion = "0.2.0"
 
 
 def mysqldatadictionary():
@@ -184,23 +182,26 @@ def _createStyleFile():
         bottom: 0;
         text-align: left
     }
+
     /*##############################*/
     /* Child pages specific styles  */
     /*##############################*/
-    .header{
-		background-color: navy;
-		color: white;
-		font-weight: bold;
-	} 
-	.header2{
-		background-color: #3498DB;
+	table {
+		width: 100%;
 		color: white;
 		font-weight: bold;
 	}
-	.row{
-		background-color: #85C1E9 ;
+    .table-title, .columns-title, .indexes-title {
+		background-color: navy;
+	} 
+	.table-header, .columns-header, .indexes-header {
+		background-color: #3498DB;
+		width: 25%
+	}
+	.table-data, .columns-data, .indexes-data {
+		background-color: #D4EEFF ;
 		color: black;
-		font-weight: bold;
+		font-weight: normal;
     }"""
     writeToFile(exportPath, css, "w")
 
@@ -308,37 +309,35 @@ def htmlSchemaFiles(schema,path):
         listPath = newPath + "\index.html"
         writeToFile(listPath,link,"a")
       
-        text += "<a id=\"%s.%s\"></a>" % (sn,tn)
-        text += "<table style=\"width:100%\">"
-        text += "<tr><th colspan=9 class='header'>Table: %s.%s</th></tr>" % (sn,tn)
-        text += "<tr class='row'><td>Table Comments</td><td colspan=\"8\">%s</td></tr>" % (table.comment)
-        text += """<tr><th colspan="9" class='header'>Columns</th></tr>
-        <tr>
-        <th class="header2">Name</th>
-        <th class="header2">Data Type</th>
-        <th class="header2">Nullable</th>
-        <th class="header2">PK</th>
-        <th class="header2">FK</th>
-    	<th class="header2">AI</th>
-        <th class="header2">UN</th>
-        <th class="header2">Default</th>
-        <th class="header2">Comment</th>
-        </tr>"""
+        text += """
+            <a id="%s.%s"></a>
+            <table>
+                <tr class="table-title"><td colspan="2" >Table</td></tr>
+                <tr><td class="table-header">Schema</td><td class="table-data">%s</td></tr>
+                <tr><td class="table-header">Table Name</td><td class="table-data">%s</td></tr>
+                <tr><td class="table-header">DB Engine</td><td class="table-data">%s</td></tr>
+                <tr><td class="table-header">Last Change</td><td class="table-data">%s</td></tr>
+                <tr><td class="table-header">Table Comments</td><td class="table-data">%s</td></tr>
+            </table>"""  % (sn, tn, sn, tn, table.tableEngine, table.lastChangeDate, table.comment)
+
+        text += """
+            <table>
+                <tr class="columns-title"><td colspan="9">Columns</td></tr>
+                <tr class="columns-header"><th>Name</th><th>Data Type</th><th>PK</th><th>NN</th><th>FK</th><th>AI</th><th>UN</th><th>Default</th><th>Comment</th></tr>"""
         for column in table.columns:
             pk = ('No', 'Yes')[bool(table.isPrimaryKeyColumn(column))]
             fk = ('No', 'Yes')[bool(table.isForeignKeyColumn(column))]
             nn = ('No', 'Yes')[bool(column.isNotNull)]
             ai = ('No', 'Yes')[bool(column.autoIncrement)]
             un = _isUnsignedColumn(column)
-            text += "<tr class='row'><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>" % (column.name,column.formattedType,nn,pk,fk,ai,un,column.defaultValue,column.comment)
+            text += """
+                <tr class="columns-data"><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>""" % (column.name,column.formattedType,pk,nn,fk,ai,un,column.defaultValue,column.comment)
 
-        text += """<tr><th colspan=\"9\"  class='header'>Indexes</th></tr>
-        <tr>
-        <th class="header2">Name</th>
-        <th class="header2">Type</th>
-        <th class="header2">Columns</th>
-        <th class="header2" colspan="6">Comment</th>
-        </tr>"""
+        text += """
+            </table>
+            <table>
+                <tr class="indexes-title"><td colspan="4">Indexes</td></tr>
+                <tr class="indexes-header"><th>Name</th><th>Type</th><th>Columns</th><th>Comment</th></tr>"""
         for index in table.indices:
             # index name
             idn = index.name
@@ -352,9 +351,12 @@ def htmlSchemaFiles(schema,path):
 
 			# index description
             id = index.comment
-            text += "<tr class='row'><td>%s</td><td>%s</td><td>%s</td><td colspan='6'>%s</td></tr>" % (idn,it,ic,id)
-
-        text += """</table></body></html>"""
+            text += """
+                <tr class="indexes-data"><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>""" % (idn, it, ic, id)
+        text += """
+            </table>
+        </body>
+    </html>"""
         writeToFile(childPath,text,"w")
     #Utilities.show_message("Report generated", "HTML Report format from current model generated", "OK","","")
     return 0
