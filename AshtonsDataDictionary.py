@@ -38,8 +38,8 @@ def ashtondatadictionary():
     global docProject
     docProject = grt.root.wb.doc.info.project
 
-    newPath=""
-    newPath=filePath + "/%s" % (docProject)
+    global newPath
+    newPath = filePath + "\%s" % (docProject)
     print(newPath)
 
     if os.path.exists(newPath):
@@ -47,19 +47,19 @@ def ashtondatadictionary():
         print("Folder Exists")
     else:    
         os.makedirs(newPath)
-        os.makedirs(filePath + "/assets")
+        os.makedirs(newPath + "\_assets")
 
     _createStyleFile()
     _createLandingPage()
     
-    indexPath=filePath + "/index.html"
+    indexPath=newPath + "\index.html"
     textStart ="""<!DOCTYPE html>
     <html>
         <head>
             <title>Schema Report</title>
             <meta charset="utf-8">
             <meta name="viewport" content="width=device-width, initial-scale=1">
-            <link rel="stylesheet" type="text/css" href="./assets/style.css">
+            <link rel="stylesheet" type="text/css" href="./_assets/style.css">
         </head>
         <body>
             <div class="page-header"><b>MySQL Database Documenter</b></div>
@@ -72,7 +72,7 @@ def ashtondatadictionary():
     #print(filePath)
     textEnd = """                </div>
                 <div class="content">
-                    <iframe id="tableFrame" src="./assets/main.html"></iframe>
+                    <iframe id="tableFrame" src="./_assets/main.html"></iframe>
                 </div>
             </div>
         </body>
@@ -82,7 +82,7 @@ def ashtondatadictionary():
 
 
 def _createStyleFile():
-    exportPath = filePath + "/assets/style.css"
+    exportPath = newPath + "\_assets\style.css"
     css = """/*Style Sheet*/
     @import url('https://fonts.googleapis.com/css?family=Orbitron:900|Poppins&display=swap');
 
@@ -205,7 +205,7 @@ def _createStyleFile():
 
 
 def _createLandingPage():
-    exportPath = filePath + "/assets/main.html"
+    exportPath = newPath + "\_assets\main.html"
     html = """<!DOCTYPE html>
     <html>
         <head>
@@ -241,7 +241,7 @@ def findSchemas(schemata, path):
         newPath=""
         sn = s.name
         print(sn)
-        newPath = path + "/%s" % (sn)
+        newPath = path + "\%s" % (sn)
         print(newPath)
         if os.path.exists(newPath):
             #maybe delete and recreate here
@@ -289,14 +289,14 @@ def htmlSchemaFiles(schema,path):
 			<title>tables</title>
             <meta charset="utf-8">
             <meta name="viewport" content="width=device-width, initial-scale=1">
-            <link rel="stylesheet" type="text/css" href="../../assets/style.css">
+            <link rel="stylesheet" type="text/css" href="../_assets/style.css">
         </head>
         <body>"""
       tn = table.name
-      newPath=path + "/%s.html" % (tn)
-      link = "                  <a href=\"#\" onclick=\"javascript:document.getElementById('tableFrame').src='./%s/%s/%s.html'\">%s.%s </a>" % (docProject,sn,tn,sn,tn)
-      global filePath
-      listPath=filePath + "/index.html"
+      childPath=path + "\%s.html" % (tn)
+      link = "                  <a href=\"#\" onclick=\"javascript:document.getElementById('tableFrame').src='./%s/%s.html'\">%s.%s </a>" % (sn,tn,sn,tn)
+      #global newPath
+      listPath = newPath + "\index.html"
       writeToFile(listPath,link,"a")
       
       text += "<a id=\"%s.%s\"></a>" % (sn,tn)
@@ -346,7 +346,7 @@ def htmlSchemaFiles(schema,path):
         #text += "</table></body></html>"
 
       text += """</table></body></html>"""
-      writeToFile(newPath,text,"w")
+      writeToFile(childPath,text,"w")
     #Utilities.show_message("Report generated", "HTML Report format from current model generated", "OK","","")
     return 0
 
