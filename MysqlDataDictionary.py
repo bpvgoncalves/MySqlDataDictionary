@@ -193,32 +193,17 @@ def _createStyleFile():
 		color: white;
 		font-weight: bold;
 	}
-    .table-title, .columns-title {
+    .table-title, .columns-title, .indexes-title {
 		background-color: navy;
 	} 
-	.table-header, .columns-header {
+	.table-header, .columns-header, .indexes-header {
 		background-color: #3498DB;
 		width: 25%
 	}
-	.table-data, .columns-data {
-		background-color: #FFFFFF ;
+	.table-data, .columns-data, .indexes-data {
+		background-color: #D4EEFF ;
 		color: black;
 		font-weight: normal;
-    }
-    .header{
-		background-color: navy;
-		color: white;
-		font-weight: bold;
-	} 
-	.header2{
-		background-color: #3498DB;
-		color: white;
-		font-weight: bold;
-	}
-	.row{
-		background-color: #85C1E9 ;
-		color: black;
-		font-weight: bold;
     }"""
     writeToFile(exportPath, css, "w")
 
