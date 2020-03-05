@@ -332,8 +332,10 @@ def htmlSchemaFiles(schema,path):
                 <th colspan="2" class="table-title">Table</th>
                 <tr><td class="table-header">Schema</td><td class="table-data">%s</td></tr>
                 <tr><td class="table-header">Table Name</td><td class="table-data">%s</td></tr>
+                <tr><td class="table-header">DB Engine</td><td class="table-data">%s</td></tr>
+                <tr><td class="table-header">Last Change</td><td class="table-data">%s</td></tr>
                 <tr><td class="table-header">Table Comments</td><td class="table-data">%s</td></tr>
-            </table>"""  % (sn,tn,sn,tn,table.comment)
+            </table>"""  % (sn, tn, sn, tn, table.tableEngine, table.lastChangeDate, table.comment)
 
         text += """<table><tr><th colspan="9" class="header">Columns</th></tr>
         <tr>
