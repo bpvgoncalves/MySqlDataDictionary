@@ -191,14 +191,14 @@ def _createStyleFile():
 		color: white;
 		font-weight: bold;
 	}
-    .table-title, .columns-title, .indexes-title {
+    .table-title, .columns-title, .indexes-title, .fkeys-title {
 		background-color: navy;
 	} 
-	.table-header, .columns-header, .indexes-header {
+	.table-header, .columns-header, .indexes-header, .fkeys-header {
 		background-color: #3498DB;
 		width: 25%
 	}
-	.table-data, .columns-data, .indexes-data {
+	.table-data, .columns-data, .indexes-data, .fkeys-data {
 		background-color: #D4EEFF ;
 		color: black;
 		font-weight: normal;
@@ -347,22 +347,36 @@ def htmlSchemaFiles(schema,path):
         for index in table.indices:
             # index name
             idn = index.name
-
 			# index columns
             ic = ""
             ic = ", ".join(str(c.referencedColumn.name) for c in index.columns)
-
 			# index type
             it = index.indexType
-
 			# index description
             id = index.comment
             text += """
                 <tr class="indexes-data"><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>""" % (idn, it, ic, id)
+
+        # foreign keys information
         text += """
-            </table>
-        </body>
-    </html>"""
+			</table>
+			<table>
+				<tr class="fkeys-title"><td colspan="6">Foreign Keys</td></tr>
+				<tr class="fkeys-header"><th>Name</th><th>OnUpdate</th><th>OnDelete</th><th>Columns</th><th>Referenced</th><th>Comment</th></tr>"""
+        for fk in table.foreignKeys:
+            col = ""
+            for c in fk.columns:
+                col += c.name + "\n"
+            rc = ""
+            for c in fk.referencedColumns:
+                rc += c.owner.name + "." + c.name + "\n"
+            text += """
+                <tr class="fkeys-data"><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>""" % (fk.name, fk.updateRule, fk.deleteRule, col, rc, fk.comment)
+            
+        text += """
+		</table>
+	</body>
+</html>"""
         writeToFile(childPath,text,"w")
     #Utilities.show_message("Report generated", "HTML Report format from current model generated", "OK","","")
     return 0
