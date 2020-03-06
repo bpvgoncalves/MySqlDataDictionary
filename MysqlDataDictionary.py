@@ -20,13 +20,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.'''
 import os
 from wb import *
 import grt
-from mforms import Utilities, FileChooser
+from mforms import Utilities, FileChooser, OpenDirectory
 
 # Global vars
 filePath = ""
 newPath = ""
 docProject = ""
-scriptVersion = "0.2.0"
+scriptVersion = "0.2.1"
 
 
 def mysqldatadictionary():
@@ -258,7 +258,7 @@ def findSchemas(schemata, path):
 def chooseFolder():
     # Put plugin contents here
     path= ""
-    filechooser = FileChooser(mforms.OpenDirectory)
+    filechooser = FileChooser(OpenDirectory)
     if filechooser.run_modal():
 		path = filechooser.get_path()
     print "HTML File: %s" % (path)
