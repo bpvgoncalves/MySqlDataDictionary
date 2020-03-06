@@ -308,7 +308,9 @@ def htmlSchemaFiles(schema,path):
         link = "                    <a href=\"#\" onclick=\"javascript:document.getElementById('tableFrame').src='./%s/%s.html'\">%s.%s </a>" % (sn,tn,sn,tn)
         listPath = newPath + "\index.html"
         writeToFile(listPath,link,"a")
-      
+
+
+		# tables information
         text += """
             <a id="%s.%s"></a>
             <table>
@@ -320,6 +322,8 @@ def htmlSchemaFiles(schema,path):
                 <tr><td class="table-header">Table Comments</td><td class="table-data">%s</td></tr>
             </table>"""  % (sn, tn, sn, tn, table.tableEngine, table.lastChangeDate, table.comment)
 
+
+		# columns information
         text += """
             <table>
                 <tr class="columns-title"><td colspan="9">Columns</td></tr>
@@ -333,6 +337,8 @@ def htmlSchemaFiles(schema,path):
             text += """
                 <tr class="columns-data"><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>""" % (column.name,column.formattedType,pk,nn,fk,ai,un,column.defaultValue,column.comment)
 
+
+		#indexes information
         text += """
             </table>
             <table>
