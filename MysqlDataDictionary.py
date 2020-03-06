@@ -32,7 +32,11 @@ scriptVersion = "0.3.0"
 def mysqldatadictionary():
     #print(grt.root.wb.doc)
     global filePath
-    filePath = chooseFolder()
+    try:
+        filePath = _chooseFolder()
+    except ValueError as err:
+        print(err.message)
+        return 1
 
     global docProject
     docProject = grt.root.wb.doc.info.project
@@ -255,17 +259,17 @@ def findSchemas(schemata, path):
     pass
 
 
-def chooseFolder():
-    # Put plugin contents here
+def _chooseFolder():
     path= ""
     filechooser = FileChooser(OpenDirectory)
     if filechooser.run_modal():
 		path = filechooser.get_path()
-    print "HTML File: %s" % (path)
 
     if len(path) >= 1:
-        #print(path)
+        print("Choosen path: " + path)
         return path
+    else:
+        raise ValueError("Invalid path.") 
     pass
 
 
