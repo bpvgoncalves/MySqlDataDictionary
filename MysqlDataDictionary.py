@@ -26,7 +26,7 @@ from mforms import Utilities, FileChooser, OpenDirectory
 filePath = ""
 newPath = ""
 docProject = ""
-scriptVersion = "0.2.1"
+scriptVersion = "0.3.0"
 
 
 def mysqldatadictionary():
