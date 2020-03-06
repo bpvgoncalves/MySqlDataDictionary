@@ -26,7 +26,7 @@ from mforms import Utilities, FileChooser, OpenDirectory
 filePath = ""
 newPath = ""
 docProject = ""
-scriptVersion = "0.2.1"
+scriptVersion = "0.3.0"
 
 
 def mysqldatadictionary():
@@ -191,14 +191,14 @@ def _createStyleFile():
 		color: white;
 		font-weight: bold;
 	}
-    .table-title, .columns-title, .indexes-title {
+    .table-title, .columns-title, .indexes-title, .fkeys-title {
 		background-color: navy;
 	} 
-	.table-header, .columns-header, .indexes-header {
+	.table-header, .columns-header, .indexes-header, .fkeys-header {
 		background-color: #3498DB;
 		width: 25%
 	}
-	.table-data, .columns-data, .indexes-data {
+	.table-data, .columns-data, .indexes-data, .fkeys-data {
 		background-color: #D4EEFF ;
 		color: black;
 		font-weight: normal;
@@ -308,7 +308,9 @@ def htmlSchemaFiles(schema,path):
         link = "                    <a href=\"#\" onclick=\"javascript:document.getElementById('tableFrame').src='./%s/%s.html'\">%s.%s </a>" % (sn,tn,sn,tn)
         listPath = newPath + "\index.html"
         writeToFile(listPath,link,"a")
-      
+
+
+		# tables information
         text += """
             <a id="%s.%s"></a>
             <table>
@@ -320,6 +322,8 @@ def htmlSchemaFiles(schema,path):
                 <tr><td class="table-header">Table Comments</td><td class="table-data">%s</td></tr>
             </table>"""  % (sn, tn, sn, tn, table.tableEngine, table.lastChangeDate, table.comment)
 
+
+		# columns information
         text += """
             <table>
                 <tr class="columns-title"><td colspan="9">Columns</td></tr>
@@ -333,6 +337,8 @@ def htmlSchemaFiles(schema,path):
             text += """
                 <tr class="columns-data"><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>""" % (column.name,column.formattedType,pk,nn,fk,ai,un,column.defaultValue,column.comment)
 
+
+		#indexes information
         text += """
             </table>
             <table>
@@ -341,22 +347,36 @@ def htmlSchemaFiles(schema,path):
         for index in table.indices:
             # index name
             idn = index.name
-
 			# index columns
             ic = ""
             ic = ", ".join(str(c.referencedColumn.name) for c in index.columns)
-
 			# index type
             it = index.indexType
-
 			# index description
             id = index.comment
             text += """
                 <tr class="indexes-data"><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>""" % (idn, it, ic, id)
+
+        # foreign keys information
         text += """
-            </table>
-        </body>
-    </html>"""
+			</table>
+			<table>
+				<tr class="fkeys-title"><td colspan="6">Foreign Keys</td></tr>
+				<tr class="fkeys-header"><th>Name</th><th>OnUpdate</th><th>OnDelete</th><th>Columns</th><th>Referenced</th><th>Comment</th></tr>"""
+        for fk in table.foreignKeys:
+            col = ""
+            for c in fk.columns:
+                col += c.name + "\n"
+            rc = ""
+            for c in fk.referencedColumns:
+                rc += c.owner.name + "." + c.name + "\n"
+            text += """
+                <tr class="fkeys-data"><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>""" % (fk.name, fk.updateRule, fk.deleteRule, col, rc, fk.comment)
+            
+        text += """
+		</table>
+	</body>
+</html>"""
         writeToFile(childPath,text,"w")
     #Utilities.show_message("Report generated", "HTML Report format from current model generated", "OK","","")
     return 0
